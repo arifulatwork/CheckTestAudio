@@ -1,0 +1,62 @@
+{
+  "expo": {
+    "name": "Bravori evaluation",
+    "slug": "Bravori-evaluation",
+    "version": "0.1.9",
+    "orientation": "portrait",
+    "icon": "./assets/bravori-logo-icon.png",
+    "userInterfaceStyle": "light",
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow $(PRODUCT_NAME) to access your photos.",
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera."
+        }
+      ],
+      "expo-font",
+      "expo-localization"
+    ],
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.bravorimusic.bravori"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/bravori-adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.bravorimusic.bravori"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "208b465a-95a0-40e8-9768-4cf2219e8aa9"
+      }
+    },
+    "owner": "bravori",
+    "experiments": {
+      "tsconfigPaths": true
+    }
+  }
+}
