@@ -1,5 +1,6 @@
 import IconAdd from 'assets/svgs/NewUI_Elements/buttonIcons/icon_add.svg';
 import IconAddWhite from 'assets/svgs/NewUI_Elements/buttonIcons/icon_add_white.svg';
+import SettingsWhite from 'assets/svgs/NewUI_Elements/buttonIcons/icon_settings.svg';
 import Back from 'assets/svgs/NewUI_Elements/buttonIcons/icon_back.svg';
 import IconBackWhite from 'assets/svgs/NewUI_Elements/buttonIcons/icon_back_white.svg';
 import Pause from 'assets/svgs/NewUI_Elements/buttonIcons/icon_pause.svg';
@@ -34,6 +35,7 @@ export interface IconProps {
     | 'IconAdd'
     | 'IconAddWhite'
     | 'IconBackWhite'
+    | 'SettingsWhite'
     | 'IconForwardWhite'
     | 'PracticeSession'
     | 'CelebrationSmall'
@@ -73,6 +75,7 @@ const Icon = ({ name, style, width, height }: IconProps) => {
   if (name === 'Image') return <Image {...commonProps} />;
   if (name === 'IconAdd') return <IconAdd {...commonProps} />;
   if (name === 'IconAddWhite') return <IconAddWhite {...commonProps} />;
+  if (name === 'SettingsWhite') return <SettingsWhite {...commonProps} />;
   if (name === 'CelebrationSmall') return <CelebrationSmall {...commonProps} />;
   if (name === 'EmailSelected') return <EmailSelected {...commonProps} />;
   if (name === 'EmailUnselected') return <EmailUnselected {...commonProps} />;

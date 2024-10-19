@@ -69,6 +69,11 @@ const StudentList = ({ navigation }: StudentListProps) => {
             style={[styles.addStudentButton]}>
             <Icon name="IconAddWhite" width="100%" height="100%" />
           </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.push('AddStudent')}
+            style={[styles.settingsButton]}>
+             <Icon name="SettingsWhite" width={23} height={23} />
+          </TouchableOpacity>
         </View>
         {studentsAlphabetical.length > 0 ? (
           <>
@@ -108,6 +113,14 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     borderRadius: 100,
+  },
+  settingsButton: {
+    backgroundColor: MAIN_ORANGE,
+    width: 30,  // Maintain button width
+    height: 30, // Maintain button height
+    borderRadius: 100, // Same circular design
+    alignItems: 'center', // Center the icon
+    justifyContent: 'center', // Center the icon
   },
   container: {
     flex: 1,
