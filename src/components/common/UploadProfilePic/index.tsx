@@ -52,40 +52,20 @@ const UploadProfilePic = ({ style, firebaseUser, onComplete, onUploadStart, onLo
 
   useEffect(() => {
     if (!showActionSheet) return;
-
+  
     showActionSheetWithOptions(
       {
         title: i18n.t('components.UploadProfilePic.userProfile'),
         options: [
-          i18n.t('components.UploadProfilePic.uploadProfilePicture'),
-          i18n.t('components.UploadProfilePic.deleteAccount'),
-          i18n.t('general.Cancel'),
+          i18n.t('general.Cancel'), // Only keep the Cancel option
         ],
-        destructiveButtonIndex: 1,
-        destructiveColor: 'red',
-        cancelButtonIndex: 2,
+        cancelButtonIndex: 0,
         cancelButtonTintColor: 'gray',
       },
       (ix) => {
         setShowActionSheet(false);
-
-        if (ix === 0) {
-          setShowImageUploader(true);
-        }
-        if (ix === 1) {
-          Alert.alert(
-            i18n.t('components.UploadProfilePic.deleteAccountConfirmation'),
-            i18n.t('components.UploadProfilePic.deleteAccountConfirmationMessage'),
-            [
-              { text: i18n.t('general.Cancel'), style: 'cancel' },
-              {
-                text: i18n.t('components.UploadProfilePic.deleteAccount'),
-                style: 'destructive',
-                onPress: () => accountDelete(),
-              },
-            ]
-          );
-        }
+  
+        // No need to handle options since they are removed
       }
     );
   }, [showActionSheet]);
