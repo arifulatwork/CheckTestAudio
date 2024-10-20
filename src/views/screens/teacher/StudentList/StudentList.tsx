@@ -70,9 +70,9 @@ const StudentList = ({ navigation }: StudentListProps) => {
             <Icon name="IconAddWhite" width="100%" height="100%" />
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => navigation.push('AddStudent')}
-            style={[styles.settingsButton]}>
-             <Icon name="SettingsWhite" width={23} height={23} />
+          onPress={() => navigation.push('Settings')}  // Navigate to Settings
+          style={[styles.settingsButton]}>
+          <Icon name="SettingsWhite" width={23} height={23} />
           </TouchableOpacity>
         </View>
         {studentsAlphabetical.length > 0 ? (

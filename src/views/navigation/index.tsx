@@ -2,7 +2,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
-
+import Settings from '@/views/screens/teacher/Settings/Settings';
 import NavigationError from './components/NavigationError';
 import DevPlayground from '../screens/dev/DevPlayground';
 import PrivacyPolicy from '../screens/welcome/PrivacyPolicy';
@@ -101,6 +101,7 @@ const Navigation = () => {
           <>
             <Stack.Group>
               <Stack.Screen name="StudentList" component={StudentList} />
+              <Stack.Screen name="Settings" component={Settings} />
             </Stack.Group>
             <Stack.Group screenOptions={{ presentation: 'modal' }}>
               <Stack.Screen name="AddStudent" component={AddStudent} />
