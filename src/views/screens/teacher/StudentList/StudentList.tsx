@@ -4,7 +4,7 @@ import { orderBy } from 'lodash';
 import { useEffect, useMemo } from 'react';
 import { useSignOut } from 'react-firebase-hooks/auth';
 import { Alert, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-
+import { deleteAccount } from '@/components/common/WelcomeHeader/db';
 import Student from './components/Student';
 import UnApprovedTasksContainer from './components/UnApprovedTaskContainer';
 
@@ -41,6 +41,40 @@ const StudentList = ({ navigation }: StudentListProps) => {
     }
   };
 
+  const accountDelete = async () => {
+    try {
+      await deleteAccount(firebaseUser);
+      onLogout(); // Log the user out after account deletion
+    } catch (e) {
+      const error = e as { message: string };
+      if (error.message === 'auth/requires-recent-login') {
+        Alert.alert(
+          i18n.t('components.UploadProfilePic.recentLoginRequired'),
+          i18n.t('components.UploadProfilePic.recentLoginDetails'),
+          [
+            { text: i18n.t('general.Cancel') },
+            { text: i18n.t('general.Logout'), onPress: onLogout },
+          ]
+        );
+      }
+    }
+  };
+
+  const handleDeleteAccount = () => {
+    Alert.alert(
+      i18n.t('components.UploadProfilePic.deleteAccountConfirmation'),
+      i18n.t('components.UploadProfilePic.deleteAccountConfirmationMessage'),
+      [
+        { text: i18n.t('general.Cancel'), style: 'cancel' },
+        {
+          text: i18n.t('components.UploadProfilePic.deleteAccount'),
+          style: 'destructive',
+          onPress: accountDelete,
+        },
+      ]
+    );
+  };
+
   const studentsAlphabetical = useMemo(() => {
     return orderBy(studentsWithTasks, (student) => student.studentDoc.data().name);
   }, [studentsWithTasks]);
@@ -70,9 +104,9 @@ const StudentList = ({ navigation }: StudentListProps) => {
             <Icon name="IconAddWhite" width="100%" height="100%" />
           </TouchableOpacity>
           <TouchableOpacity
-          onPress={() => navigation.push('Settings')}  // Navigate to Settings
-          style={[styles.settingsButton]}>
-          <Icon name="SettingsWhite" width={23} height={23} />
+            onPress={handleDeleteAccount}  // Call delete account function
+            style={[styles.settingsButton]}>
+            <Icon name="SettingsWhite" width={23} height={23} />
           </TouchableOpacity>
         </View>
         {studentsAlphabetical.length > 0 ? (
