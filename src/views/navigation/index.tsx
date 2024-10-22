@@ -94,6 +94,7 @@ const Navigation = () => {
         {bravoriUser?.userType === 'Student' ? (
           <>
             <Stack.Screen name="StudentTaskView" component={StudentTaskView} />
+            <Stack.Screen name="Settings" component={Settings} />
           </>
         ) : null}
 

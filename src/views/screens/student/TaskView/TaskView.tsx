@@ -3,10 +3,10 @@ import { FIREBASE_AUTH } from 'firebaseConfig';
 import { sample, sortBy } from 'lodash';
 import { useEffect, useMemo } from 'react';
 import { useSignOut } from 'react-firebase-hooks/auth';
-import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
-
+import { Alert, Pressable, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import Icon from '@/components/common/Icon';
 import StudentTasksContainer from './components/studentTaskContainer';
-
+import Settings from '@/views/screens/teacher/Settings/Settings';
 import useTaskArchive from '@/commonHooks/useTaskArchive';
 import { dateConstraint } from '@/commonHooks/useTaskArchive/db';
 import useUser from '@/commonHooks/useUser';
@@ -23,6 +23,7 @@ import i18n from '@/translations/i18n';
 import { UserReward } from '@/types/User';
 import { PageParams } from '@/views/navigation';
 
+import { MAIN_ORANGE } from '@/Colors';
 type StudentTaskViewProps = {
   navigation: NativeStackNavigationProp<PageParams, 'StudentTaskView'>;
 };
@@ -151,6 +152,13 @@ const StudentTaskView = ({ navigation }: StudentTaskViewProps) => {
 
         <View style={{ flex: 1 }} />
         <BravoriButton onPress={logOut}>{i18n.t('general.Logout')}</BravoriButton>
+        <TouchableOpacity
+            onPress={() => navigation.push('Settings')}
+            style={[styles.settingsButton]}>
+           
+              <Icon name="SettingsWhite" width={23} height={23} />
+            
+          </TouchableOpacity>
       </View>
     </ComponentWithBackground>
   );
@@ -159,6 +167,16 @@ const StudentTaskView = ({ navigation }: StudentTaskViewProps) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  settingsButton: {
+    backgroundColor: MAIN_ORANGE,
+    width: 40,
+    height: 40,
+    borderRadius: 100,
+    alignItems: 'center',
+    justifyContent: 'center', 
+    bottom: -10,
+    right: 10,
   },
 });
 export default StudentTaskView;
