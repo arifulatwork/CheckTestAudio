@@ -98,11 +98,6 @@ const StudentList = ({ navigation }: StudentListProps) => {
             style={[styles.addStudentButton]}>
             <Icon name="IconAddWhite" width="100%" height="100%" />
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => navigation.push('Settings')}
-            style={[styles.settingsButton]}>
-            <Icon name="SettingsWhite" width={23} height={23} />
-          </TouchableOpacity>
         </View>
         {studentsAlphabetical.length > 0 ? (
           <View style={styles.studentWrapper}>
@@ -126,6 +121,11 @@ const StudentList = ({ navigation }: StudentListProps) => {
           <BravoriButton style={[spacing.mt2]} onPress={onLogout}>
             {i18n.t('general.Logout')}
           </BravoriButton>
+          <TouchableOpacity
+            onPress={() => navigation.push('Settings')}
+            style={[styles.settingsButton]}>
+            <Icon name="SettingsWhite" width={23} height={23} />
+          </TouchableOpacity>
         </View>
         <ImageUploader
           onHide={() => setShowImageUploader(false)}
@@ -148,11 +148,14 @@ const styles = StyleSheet.create({
   },
   settingsButton: {
     backgroundColor: MAIN_ORANGE,
-    width: 30,
-    height: 30,
+    width: 40,
+    height: 40,
     borderRadius: 100,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center', 
+    bottom: -10, // Adjust this value to place it further up or down
+    right: 10, // Adjust this value to place it further up or down
+    // Adjust for horizontal positioning
   },
   container: {
     flex: 1,
