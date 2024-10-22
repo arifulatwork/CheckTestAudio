@@ -1,10 +1,9 @@
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { FIREBASE_AUTH } from 'firebaseConfig';
 import { orderBy } from 'lodash';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useRef } from 'react';
 import { useSignOut } from 'react-firebase-hooks/auth';
-import { Alert, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { useActionSheet } from '@expo/react-native-action-sheet';
+import { Alert, View, Text, StyleSheet, TouchableOpacity, Animated } from 'react-native';
 import Settings from '@/views/screens/teacher/Settings/Settings';
 import Student from './components/Student';
 import UnApprovedTasksContainer from './components/UnApprovedTaskContainer';
@@ -37,7 +36,19 @@ const StudentList = ({ navigation }: StudentListProps) => {
   const [showImageUploader, setShowImageUploader] = useState(false); 
   const [uploading, setUploading] = useState(false); 
 
+  const rotateValue = useRef(new Animated.Value(0)).current;
+
+  const startRotation = () => {
+    rotateValue.setValue(0);
+    Animated.timing(rotateValue, {
+      toValue: 1,
+      duration: 2000,
+      useNativeDriver: true,
+    }).start(() => startRotation());
+  };
+
   useEffect(() => {
+    startRotation();
     setTeacherId(firebaseUser?.uid);
   }, [firebaseUser]);
 
@@ -76,6 +87,11 @@ const StudentList = ({ navigation }: StudentListProps) => {
   };
 
   if (!firebaseUser) return <Text>{i18n.t('general.Loading')}</Text>;
+
+  const rotate = rotateValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '360deg'],
+  });
 
   return (
     <ComponentWithBackground
@@ -124,7 +140,9 @@ const StudentList = ({ navigation }: StudentListProps) => {
           <TouchableOpacity
             onPress={() => navigation.push('Settings')}
             style={[styles.settingsButton]}>
-            <Icon name="SettingsWhite" width={23} height={23} />
+            <Animated.View style={{ transform: [{ rotate }] }}>
+              <Icon name="SettingsWhite" width={23} height={23} />
+            </Animated.View>
           </TouchableOpacity>
         </View>
         <ImageUploader
@@ -153,9 +171,8 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     alignItems: 'center',
     justifyContent: 'center', 
-    bottom: -10, // Adjust this value to place it further up or down
-    right: 10, // Adjust this value to place it further up or down
-    // Adjust for horizontal positioning
+    bottom: -10,
+    right: 10,
   },
   container: {
     flex: 1,
@@ -164,10 +181,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-  },
-  addButton: {
-    height: 30,
-    width: 30,
   },
   noStudentsContainer: {
     flex: 1,
