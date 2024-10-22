@@ -98,11 +98,11 @@ const StudentList = ({ navigation }: StudentListProps) => {
             style={[styles.addStudentButton]}>
             <Icon name="IconAddWhite" width="100%" height="100%" />
           </TouchableOpacity>
-          <Settings 
-            firebaseUser={firebaseUser} 
-            onLogout={onLogout} 
-            onUploadProfilePicture={() => setShowImageUploader(true)} 
-          />
+          <TouchableOpacity
+            onPress={() => navigation.push('Settings')}
+            style={[styles.settingsButton]}>
+            <Icon name="SettingsWhite" width={23} height={23} />
+          </TouchableOpacity>
         </View>
         {studentsAlphabetical.length > 0 ? (
           <View style={styles.studentWrapper}>
