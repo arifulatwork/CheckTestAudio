@@ -10,6 +10,7 @@ export default {
       deleteAccountConfirmation: 'Delete account?',
       deleteAccountConfirmationMessage:
         'Are you sure you want to delete your account? This option cannot be reversed.',
+      'uploadSuccess': 'Profile picture uploaded successfully',
     },
     ImageUploader: {
       waitingForPermissions: 'Waiting for permissions',

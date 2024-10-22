@@ -71,7 +71,7 @@ const Settings = ({ navigation }) => {
       const fullPath = uris[0];
       try {
         await updateProfilePic(firebaseUser.uid, fullPath);
-        Alert.alert(i18n.t('components.UploadProfilePic.uploadSuccess'), i18n.t('components.UploadProfilePic.imageUploadedSuccessfully'));
+        Alert.alert(i18n.t('components.UploadProfilePic.uploadSuccess'));
       } catch (error) {
         console.error("Failed to update profile picture:", error);
         Alert.alert(i18n.t('general.Error'), i18n.t('general.ErrorUpdatingProfilePicture'));
