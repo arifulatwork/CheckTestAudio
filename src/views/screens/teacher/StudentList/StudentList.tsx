@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useSignOut } from 'react-firebase-hooks/auth';
 import { Alert, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useActionSheet } from '@expo/react-native-action-sheet';
-
+import Settings from '@/views/screens/teacher/Settings/Settings';
 import Student from './components/Student';
 import UnApprovedTasksContainer from './components/UnApprovedTaskContainer';
 
@@ -33,7 +33,7 @@ const StudentList = ({ navigation }: StudentListProps) => {
   const [signOut] = useSignOut(FIREBASE_AUTH);
   const { bravoriUser, firebaseUser, loading } = useUser();
   const { setTeacherId, studentsWithTasks, loading: studentsLoading } = useStudentsWithTasks();
-  const { showActionSheetWithOptions } = useActionSheet(); 
+  
   const [showImageUploader, setShowImageUploader] = useState(false); 
   const [uploading, setUploading] = useState(false); 
 
@@ -53,61 +53,6 @@ const StudentList = ({ navigation }: StudentListProps) => {
     return orderBy(studentsWithTasks, (student) => student.studentDoc.data().name);
   }, [studentsWithTasks]);
 
-  const showSettingsActionSheet = () => {
-    showActionSheetWithOptions(
-      {
-        title: i18n.t('components.UploadProfilePic.userProfile'),
-        options: [
-          i18n.t('components.UploadProfilePic.uploadProfilePicture'),
-          i18n.t('components.UploadProfilePic.deleteAccount'),
-          i18n.t('general.Cancel'),
-        ],
-        destructiveButtonIndex: 1,
-        destructiveColor: 'red',
-        cancelButtonIndex: 2,
-        cancelButtonTintColor: 'gray',
-      },
-      (ix) => {
-        if (ix === 0) {
-          setShowImageUploader(true);
-        }
-        if (ix === 1) {
-          Alert.alert(
-            i18n.t('components.UploadProfilePic.deleteAccountConfirmation'),
-            i18n.t('components.UploadProfilePic.deleteAccountConfirmationMessage'),
-            [
-              { text: i18n.t('general.Cancel'), style: 'cancel' },
-              {
-                text: i18n.t('components.UploadProfilePic.deleteAccount'),
-                style: 'destructive',
-                onPress: async () => {
-                  if (firebaseUser) {
-                    try {
-                      await deleteAccount(firebaseUser);
-                      onLogout();
-                    } catch (e) {
-                      const error = e as { message: string };
-                      if (error.message === 'auth/requires-recent-login') {
-                        Alert.alert(
-                          i18n.t('components.UploadProfilePic.recentLoginRequired'),
-                          i18n.t('components.UploadProfilePic.recentLoginDetails'),
-                          [
-                            { text: i18n.t('general.Cancel') },
-                            { text: i18n.t('general.Logout'), onPress: onLogout },
-                          ]
-                        );
-                      }
-                    }
-                  }
-                },
-              },
-            ]
-          );
-        }
-      }
-    );
-  };
-
   const onImages = async (assets) => {
     setShowImageUploader(false);
     if (!assets[0]?.uri) return;
@@ -117,7 +62,6 @@ const StudentList = ({ navigation }: StudentListProps) => {
       `/profiles/${firebaseUser.uid}`,
       console.log
     );
-    console.log(errors);
     const fullPath = uris[0];
     onComplete(fullPath);
   };
@@ -154,26 +98,23 @@ const StudentList = ({ navigation }: StudentListProps) => {
             style={[styles.addStudentButton]}>
             <Icon name="IconAddWhite" width="100%" height="100%" />
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={showSettingsActionSheet} 
-            style={[styles.settingsButton]}>
-            <Icon name="SettingsWhite" width={23} height={23} />
-          </TouchableOpacity>
+          <Settings 
+            firebaseUser={firebaseUser} 
+            onLogout={onLogout} 
+            onUploadProfilePicture={() => setShowImageUploader(true)} 
+          />
         </View>
         {studentsAlphabetical.length > 0 ? (
-          <>
-            <View style={styles.studentWrapper}>
-              {studentsAlphabetical.map((s, i) => (
-                <Student
-                  key={i}
-                  profileURI={s.studentDoc.data().profilePhoto}
-                  name={s.studentDoc.data().name}
-                  tasks={s.tasks.map((t) => t.data())}
-                />
-              ))}
-            </View>
-            <View style={{ flex: 1 }} />
-          </>
+          <View style={styles.studentWrapper}>
+            {studentsAlphabetical.map((s, i) => (
+              <Student
+                key={i}
+                profileURI={s.studentDoc.data().profilePhoto}
+                name={s.studentDoc.data().name}
+                tasks={s.tasks.map((t) => t.data())}
+              />
+            ))}
+          </View>
         ) : (
           <View style={[styles.noStudentsContainer, spacing.mt2]}>
             <View style={[spacing.pa1, styles.noStudentsBox]}>
@@ -220,6 +161,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+  },
+  addButton: {
+    height: 30,
+    width: 30,
   },
   noStudentsContainer: {
     flex: 1,
