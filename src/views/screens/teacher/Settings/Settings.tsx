@@ -7,7 +7,7 @@ import { uploadAndReportProgress } from '@/utils/files';
 import i18n from '@/translations/i18n';
 import useUser from '@/commonHooks/useUser'; 
 import ImageUploader, { OnImagesType } from '@/components/common/ImageUploader'; 
-
+import ComponentWithBackground from '@/components/common/ComponentWithBackground';
 const MAIN_ORANGE = '#FFA500';
 
 const Settings = ({ navigation }) => {
@@ -80,6 +80,7 @@ const Settings = ({ navigation }) => {
   };
 
   return (
+    <ComponentWithBackground>
     <View style={styles.container}>
       <TouchableOpacity style={styles.button} onPress={handleUploadProfilePicture}>
         <Text style={styles.buttonText}>
@@ -101,6 +102,7 @@ const Settings = ({ navigation }) => {
         visible={showImageUploader}
       />
     </View>
+    </ComponentWithBackground>
   );
 };
 
