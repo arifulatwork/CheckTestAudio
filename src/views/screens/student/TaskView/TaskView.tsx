@@ -1,12 +1,11 @@
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { FIREBASE_AUTH } from 'firebaseConfig';
 import { sample, sortBy } from 'lodash';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { useSignOut } from 'react-firebase-hooks/auth';
-import { Alert, Pressable, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { Alert, Pressable, StyleSheet, Text, View, TouchableOpacity, Animated } from 'react-native';
 import Icon from '@/components/common/Icon';
 import StudentTasksContainer from './components/studentTaskContainer';
-import Settings from '@/views/screens/teacher/Settings/Settings';
 import useTaskArchive from '@/commonHooks/useTaskArchive';
 import { dateConstraint } from '@/commonHooks/useTaskArchive/db';
 import useUser from '@/commonHooks/useUser';
@@ -22,8 +21,8 @@ import useStudentTasks from '@/db/useStudentTasks';
 import i18n from '@/translations/i18n';
 import { UserReward } from '@/types/User';
 import { PageParams } from '@/views/navigation';
-
 import { MAIN_ORANGE } from '@/Colors';
+
 type StudentTaskViewProps = {
   navigation: NativeStackNavigationProp<PageParams, 'StudentTaskView'>;
 };
@@ -49,10 +48,22 @@ const StudentTaskView = ({ navigation }: StudentTaskViewProps) => {
     return allRewards.find((r) => r.id === id);
   }, [bravoriUser]);
 
+  const rotateValue = useRef(new Animated.Value(0)).current;
+
+  const startRotation = () => {
+    rotateValue.setValue(0);
+    Animated.timing(rotateValue, {
+      toValue: 1,
+      duration: 2000,
+      useNativeDriver: true,
+    }).start(() => startRotation());
+  };
+
   useEffect(() => {
     if (!firebaseUser) return;
     setId(firebaseUser.uid);
     setStudentId(firebaseUser.uid);
+    startRotation();
   }, [firebaseUser]);
 
   const logOut = async () => {
@@ -81,6 +92,11 @@ const StudentTaskView = ({ navigation }: StudentTaskViewProps) => {
 
   if (loading || !firebaseUser) return <Text>{i18n.t('general.Loading')}</Text>;
 
+  const rotate = rotateValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '360deg'],
+  });
+
   return (
     <ComponentWithBackground type="topbottom" scroll>
       <View style={[styles.container]}>
@@ -93,7 +109,6 @@ const StudentTaskView = ({ navigation }: StudentTaskViewProps) => {
                 flexDirection: 'row',
                 alignItems: 'center',
                 backgroundColor: 'white',
-
                 borderRadius: 30,
               }}>
               <Sticker
@@ -102,7 +117,6 @@ const StudentTaskView = ({ navigation }: StudentTaskViewProps) => {
                 numberOfSlices={1}
                 numberOfSlicesToShow={1}
               />
-
               <Text style={[spacing.mh1, typography.text, typography.bold]}>
                 {i18n.t('rewards.rewardsPageTitle')}
               </Text>
@@ -153,12 +167,12 @@ const StudentTaskView = ({ navigation }: StudentTaskViewProps) => {
         <View style={{ flex: 1 }} />
         <BravoriButton onPress={logOut}>{i18n.t('general.Logout')}</BravoriButton>
         <TouchableOpacity
-            onPress={() => navigation.push('Settings')}
-            style={[styles.settingsButton]}>
-           
-              <Icon name="SettingsWhite" width={23} height={23} />
-            
-          </TouchableOpacity>
+          onPress={() => navigation.push('Settings')}
+          style={[styles.settingsButton]}>
+          <Animated.View style={{ transform: [{ rotate }] }}>
+            <Icon name="SettingsWhite" width={23} height={23} />
+          </Animated.View>
+        </TouchableOpacity>
       </View>
     </ComponentWithBackground>
   );
@@ -179,4 +193,5 @@ const styles = StyleSheet.create({
     right: 10,
   },
 });
+
 export default StudentTaskView;
