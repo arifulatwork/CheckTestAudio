@@ -80,7 +80,7 @@ const Settings = ({ navigation }) => {
   };
 
   return (
-    <ComponentWithBackground>
+    <ComponentWithBackground type="topbottom" scroll>
     <View style={styles.container}>
       <TouchableOpacity style={styles.button} onPress={handleUploadProfilePicture}>
         <Text style={styles.buttonText}>
@@ -111,7 +111,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f0f0f0',
   },
   button: {
     backgroundColor: MAIN_ORANGE,
